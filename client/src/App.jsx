@@ -1,9 +1,9 @@
 import { Button } from "./components/ui/button"
-
+import Auth  from "./pages/authPage/authPage.jsx"
 function App() {
   return (
     <div>
-      <Button>Click me</Button>
+      <Auth></Auth>
     </div>
   )
 }
