@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
 const authRoutes = require("./route/AuthRoutes.js")
-
+const projectRoutes = require("./route/projectRoutes.js")
 dotenv.config();
 
 const app = express();
@@ -19,7 +19,7 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 app.use("/api/auth",authRoutes);
-
+app.use("/project",projectRoutes);
 mongoose.connect(databaseURL).then(()=>{console.log('Database connection successfull')})
 app.listen(port,()=>{
     console.log(`Server is listening at port ${port}`);    
