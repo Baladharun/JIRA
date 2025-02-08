@@ -26,7 +26,6 @@ const signup = async function (req, res, next) {
             user:{
                 id:newUser.id,
                 email:newUser.email,
-                profileSetup:newUser.ProfileSetup
             }
         })
     } catch (err) {
@@ -66,11 +65,7 @@ const login = async function (req, res, next) {
             user:{
                 id:newUser.id,
                 email:newUser.email,
-                profileSetup:newUser.ProfileSetup,
-                image:newUser.image,
-                firstName:newUser.firstName,
-                lastName:newUser.lastName,
-                color:newUser.color
+                
             }
         })
     } catch (err) {

@@ -25,10 +25,9 @@ const Auth = () => {
     console.log(response);
     if(response.data.user.id){
       if(response.data.user.profileSetup)
-        navigate("/chat");
+        navigate("/create-project");
       else {
         console.log("profile");
-        await setUserInfo(response.data.user);
         const userInfo = userStore((state) => state.userInfo); 
         navigate("/profile");
       }
