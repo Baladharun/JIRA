@@ -1,18 +1,20 @@
 const jwt = require('jsonwebtoken');
 const User = require("../model/userModel"); 
 const bcrypt = require('bcrypt');
+const Project = require("../model/projectModel");
+// const user = require('../model/userModel');
 
 const maxAge = 3 * 24 * 60 * 60 * 1000; 
 
 const signup = async function (req, res, next) {
     try {
-        const { email, password } = req.body; 
-        console.log(email);
-        console.log(password);
+        const { email, password,name} = req.body; 
+        
         if (!email || !password) {
             return res.status(400).send('Email and password are required');
         }
-        const newUser = await User.create({ email, password }); 
+        if(await user.find({userName:name}) > 0) return res.status(200).json({message : 'user already exists'});
+        const newUser = await User.create({ email, password,userName:name}); 
         const token = await jwt.sign({ email }, process.env.JWT_KEY, { expiresIn: '3d' });
         res.cookie("jwt", token, {
             maxAge: 3 * 24 * 60 * 60 * 1000, 
@@ -21,12 +23,12 @@ const signup = async function (req, res, next) {
             sameSite: 'Lax', 
             path: '/' 
         });
-        
+    
         return res.status(201).json({
             user:{
                 id:newUser.id,
                 email:newUser.email,
-                profileSetup:newUser.ProfileSetup
+                userName:newUser.userName
             }
         })
     } catch (err) {
@@ -61,17 +63,19 @@ const login = async function (req, res, next) {
             sameSite: 'Lax', 
             path: '/' 
         });
-        
-        return res.status(201).json({
-            user:{
-                id:newUser.id,
-                email:newUser.email,
-                profileSetup:newUser.ProfileSetup,
-                image:newUser.image,
-                firstName:newUser.firstName,
-                lastName:newUser.lastName,
-                color:newUser.color
+        const projectDetailsOfTheUser = [];
+        if(newUser.projectName) {
+            for(id of newUser.hashedProject) {
+                const project = await Project.findOne({ _id:id});
+                projectDetailsOfTheUser.push(project);
             }
+            return res.status(201).json({
+                user:newUser,
+                projectDetails : projectDetailsOfTheUser
+            })
+        }
+        return res.status(201).json({
+            user:newUser
         })
     } catch (err) {
         console.error(err); 

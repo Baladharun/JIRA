@@ -1,0 +1,33 @@
+.container-p {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 50px;
+    border-radius: 10px;
+    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+    width:90%;
+    max-width: 90%;
+}
+.col1 {
+    width:30%;
+    max-width: 30%;
+}
+ul li {
+    background-color: #888877;
+    border-radius: 2px;
+    display: inline-flex;
+    padding: 5px;
+    margin-right:5px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+}
+.col2{
+    width:60%;
+    max-width: 60%;
+}
+.rectangle-box1{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+    margin:30px;
+}
