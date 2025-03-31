@@ -1,4 +1,4 @@
-.container-p{
+.container-p {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -8,11 +8,11 @@
     width:90%;
     max-width: 90%;
 }
-.col1{
+.col1 {
     width:30%;
     max-width: 30%;
 }
-ul > li {
+ul li {
     background-color: #888877;
     border-radius: 2px;
     display: inline-flex;

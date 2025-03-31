@@ -21,6 +21,6 @@ app.use(cookieParser());
 app.use("/api/auth",authRoutes);
 app.use("/project",projectRoutes);
 mongoose.connect(databaseURL).then(()=>{console.log('Database connection successfull')})
-app.listen(port,()=>{
+app.listen(process.env.PORT,()=>{
     console.log(`Server is listening at port ${port}`);    
 });

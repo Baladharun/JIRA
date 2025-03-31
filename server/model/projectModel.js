@@ -18,13 +18,13 @@ const projectSchema = new mongoose.Schema({
         required: true
     },
     collaborators: {
-        type: [String], // Array of strings
+        type: [String], 
         default: []
     },
     stages: {
         type: Map,
-        of: [Object], // Each key is a stage name, and its value is an array of objects
-        default: {}   // Default empty object
+        of: [Object], 
+        default: {}   
     },
     accessType: {
         type: String,
