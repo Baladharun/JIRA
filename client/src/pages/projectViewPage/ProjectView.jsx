@@ -1,4 +1,7 @@
 import { Calendar, Home, Inbox, Search, Settings } from "lucide-react"
+import axios from "axios"
+import { userStore,appStore} from '@/store';
+import { useState,useEffect } from "react";
 import Navbar from "../Navbar/Navbar.jsx"
 import {
   Sidebar,
@@ -39,8 +42,7 @@ const items = [
   },
 ]
 
-export default async function AppSidebar() {
-  const projectDeatils = await axios.post('http://localhost:5174/getProjectDetails')
+export default function AppSidebar() {
   return (
     <>
     <Sidebar>
@@ -64,9 +66,7 @@ export default async function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-    <div className="flex gap-1">
-      
-    </div>
+    
     </>
   )
 }
