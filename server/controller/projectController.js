@@ -16,13 +16,13 @@ const newProject = async (req, res) => {
         }
 
         const collaboratorIds = [];
-        const usersToUpdate = []; // Store all users to update later
+        const usersToUpdate = []; 
 
         for (const collaborator of collaborators || []) {
             const userDoc = await User.findOne({ userName: collaborator });
             if (userDoc) {
                 collaboratorIds.push(userDoc._id);
-                usersToUpdate.push(userDoc); // Store the user for later updates
+                usersToUpdate.push(userDoc); 
             } else {
                 return res.status(404).json({ message: `${collaborator} not found` });
             }
@@ -63,9 +63,9 @@ const getProjectDetails = async (req, res) => {
             return res.status(404).json({ message: "Project not found" });
         }
 
-        if (project.accessType === "private" && !(project.collaborators.includes(user))) {
-            return res.status(403).json({ message: "You don't have access to this project" });
-        }
+        // if (project.accessType === "private" && !(project.collaborators.includes(user))) {
+        //     return res.status(403).json({ message: "You don't have access to this project" });
+        // }
 
         res.status(200).json(project);
     } catch (error) {
@@ -83,12 +83,16 @@ const createTicket = async (req, res) => {
             return res.status(404).json({ message: "Project with given id not found" });
         }
 
-        if (!projectDocument.stages[stage]) {  // Fix the condition
-            return res.status(400).json({ message: "Invalid stage provided" });
+        const stageKeys = Object.keys(projectDocument.stages);
+        const matchedStage = stageKeys.find(key => key.toLowerCase() === stage.toLowerCase());
+
+        if (!matchedStage) {
+            return res.status(400).json({ message: `Invalid stage provided. Available stages: ${stageKeys.join(', ')}` });
         }
 
         const newTicket = { description, reporter, assignee, storyPoint, priority, title, type };
-        projectDocument.stages[stage].push(newTicket);
+        projectDocument.stages[matchedStage].push(newTicket);
+        projectDocument.markModified('stages'); 
         await projectDocument.save();
 
         res.status(201).json({ message: "Ticket created successfully" });
@@ -97,5 +101,6 @@ const createTicket = async (req, res) => {
         res.status(500).json({ message: "Internal Server Error", error: error.message });
     }
 };
+
 
 module.exports = { newProject, getProjectDetails, createTicket };

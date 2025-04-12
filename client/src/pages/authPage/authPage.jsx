@@ -4,7 +4,7 @@ import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
-import { userStore } from '@/store';
+import { userStore,appStore} from '@/store';
 import { BrowserRouter, Route, Routes, useNavigate } from "react-router-dom";
 import './style.css'
 const Auth = () => {
@@ -25,9 +25,24 @@ const Auth = () => {
     const response = await axios.post("http://localhost:5174/api/auth/login",{email,password},{ withCredentials: true });
     console.log(response);
     if(response.data.user){
-      userStore.getState().setUserInfo(response.data.user);
+      const user = response.data.user;
+      const projectData = user.projectName.reduce((acc, projectName, index) => {
+        acc[projectName] = user.hashedProject[index];
+        return acc;
+      }, {});
+
+      userStore.getState().setUserInfo({
+        _id: user._id,
+        email: user.email,
+        userName: user.userName,
+        password: user.password,
+        projectData 
+      });
+      if(Object.keys(projectData).length > 0) {
+        appStore.getState().setNestedValue('currentProject', Object.keys(projectData)[0]);
+      }
       console.log(userStore.getState().userInfo);
-      navigate("/project-view");
+      navigate("/your-work");
   }
   };
   
@@ -57,8 +72,20 @@ const Auth = () => {
     else if(response.data.message == "user already exists") 
       toast.error("Username already exists,Try other name")
     if(response.data.user.id){
-        userStore.getState().setUserInfo(response.data.user);
-        navigate("/project-view");
+      const user = response.data.user;
+      const projectData = user.projectName.reduce((acc, projectName, index) => {
+        acc[projectName] = user.hashedProject[index];
+        return acc;
+      }, {});
+
+      userStore.getState().setUserInfo({
+        _id: user._id,
+        email: user.email,
+        userName: user.userName,
+        password: user.password,
+        projectData 
+      });
+      navigate("/project-view");
     }
     }
     catch(error){
