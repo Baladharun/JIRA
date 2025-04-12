@@ -43,17 +43,22 @@ const CreateProject = () => {
             return;
         }
 
-        const userInfo = userStore.getState().userInfo; // Correct way to access store
+        const userInfo = userStore.getState().userInfo; 
         try {
-            await axios.post("http://127.0.0.1:5174/project/new-project", {
+            const res = await axios.post("http://127.0.0.1:5174/project/new-project", {
                 projectName,
                 stages,
                 collaborators,
                 accessType,
-                admin: userInfo?.name || "Unknown", // Handle missing userInfo
+                admin: userInfo?.name || "Unknown", 
             });
-            toast.success("Project created successfully!");
+            if (res.data.message) toast.error(res.data.message); 
+            else toast.success("Project created successfully!");
         } catch (error) {
+            if (error.response) {
+                toast.error(error.response.data.message || "Failed to create project.");
+            }
+            else
             toast.error("Failed to create project.");
             console.error(error);
         }
@@ -161,7 +166,7 @@ const CreateProject = () => {
                     </div>
                     <ul>
                         {stages.map((name, index) => (
-                            <li key={index}>{name}</li>
+                            <li key={index} className="list-component">{name}</li>
                         ))}
                     </ul>
                 </div>
